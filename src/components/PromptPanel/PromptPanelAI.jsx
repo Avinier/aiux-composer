@@ -66,19 +66,19 @@ const PromptPanelAI = ({
             <AnimatePresence>
               {isAIThinking && (
                   <motion.div
-                    className="mx-6 mt-4 p-4 bg-purple-50 border-2 border-gray rounded-sm"
+                    className="mx-6 mt-4 p-4 bg-pink-50 border-2 border-gray rounded-sm"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
                   >
                   <div className="flex items-center gap-3">
-                    <Brain className="w-5 h-5 text-purple-600 animate-pulse" />
-                    <span className="text-sm font-body text-purple-700 font-medium">AI Thinking</span>
-                    <Loader2 className="w-4 h-4 text-purple-600 animate-spin ml-auto" />
+                    <Brain className="w-5 h-5 text-pink-600 animate-pulse" />
+                    <span className="text-sm font-body text-pink-700 font-medium">AI Thinking</span>
+                    <Loader2 className="w-4 h-4 text-pink-600 animate-spin ml-auto" />
                   </div>
                   {aiThinkingText && (
-                    <p className="text-sm font-body text-purple-600 mt-2 italic">
+                    <p className="text-sm font-body text-pink-600 mt-2 italic">
                       {aiThinkingText}
                     </p>
                   )}

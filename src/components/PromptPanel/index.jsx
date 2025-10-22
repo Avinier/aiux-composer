@@ -183,7 +183,7 @@ const PromptPanel = ({
                       className="rounded-sm shadow-sm"
                       style={{
                         backgroundColor: '#FEFEFE',
-                        border: isGenerating ? `1px solid ${GLOW_COLORS[colorIndex]}40` : '1px solid #E5E5E5',
+                        border: '1px solid #E5E5E5',
                         margin: '10px 20px',
                         padding: '10px 10px',
                         minHeight: '60px',
@@ -199,60 +199,34 @@ const PromptPanel = ({
                           : (currentPrompt || responses[activeBoxId])
                             ? 'auto'
                             : '60px',
-                        scale: isGenerating ? [1, 1.005, 1] : 1
+                        boxShadow: isGenerating ? [
+                          `inset 0 0 15px rgba(${hexToRgb(GLOW_COLORS[colorIndex])}, 0.6),
+                           inset 0 0 25px rgba(${hexToRgb(GLOW_COLORS[colorIndex])}, 0.4)`,
+                          `inset 0 0 20px rgba(${hexToRgb(GLOW_COLORS[(colorIndex + 1) % GLOW_COLORS.length])}, 0.7),
+                           inset 0 0 35px rgba(${hexToRgb(GLOW_COLORS[(colorIndex + 1) % GLOW_COLORS.length])}, 0.5)`,
+                          `inset 0 0 15px rgba(${hexToRgb(GLOW_COLORS[colorIndex])}, 0.6),
+                           inset 0 0 25px rgba(${hexToRgb(GLOW_COLORS[colorIndex])}, 0.4)`
+                        ] : 'none'
                       }}
                       transition={{
                         duration: 0.3,
                         height: { duration: 0.2, ease: "easeInOut" },
-                        scale: isGenerating ? {
-                          duration: 1.2,
+                        boxShadow: isGenerating ? {
+                          duration: 1.5,
                           repeat: Infinity,
                           ease: "easeInOut"
-                        } : { duration: 0.3 }
+                        } : {}
                       }}
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
                     >
-                      {/* Glow Layer - animated inset shadow */}
-                      {isGenerating && (
-                        <motion.div
-                          className="absolute inset-0 rounded-sm pointer-events-none"
-                          style={{
-                            zIndex: 1,
-                            boxShadow: getInsetGlowShadow(hexToRgb(GLOW_COLORS[colorIndex]), isHovered)
-                          }}
-                          animate={{
-                            opacity: pulsePhase === 1 ? 0.6 : 1 // Dim effect at phase 1
-                          }}
-                          transition={{
-                            duration: 0.4,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      )}
-
                       {/* Content Layer */}
                       <div style={{ position: 'relative', zIndex: 2 }}>
-                        {/* Thinking Section - shown when LLM is generating (but not for root box) */}
-                        {isGenerating && activeNode?.data.type !== BOX_TYPES.ROOT && (
-                        <div className="p-4 text-center">
-                          <motion.p
-                            className="text-[15px] font-heading leading-relaxed text-lightgray"
-                            style={{ letterSpacing: '0.025em' }}
-                            animate={{
-                              opacity: [0.5, 1, 0.5],
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            🤔 {thinkingWord}
-                          </motion.p>
-                          {generationMessage && (
+                        {/* Generation Message Section - shown when LLM is generating */}
+                        {isGenerating && generationMessage && (
+                          <div className="p-4 text-center">
                             <motion.p
-                              className="text-xs font-body text-lightgray mt-2"
+                              className="text-xs font-heading font-italic text-lightgray"
                               style={{ fontWeight: '400' }}
                               animate={{
                                 opacity: [0.3, 0.7, 0.3],
@@ -265,9 +239,8 @@ const PromptPanel = ({
                             >
                               {generationMessage}
                             </motion.p>
-                          )}
-                        </div>
-                      )}
+                          </div>
+                        )}
 
                       {/* Question Section - shown when not generating */}
                       {!isGenerating && currentPrompt && (

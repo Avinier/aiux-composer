@@ -115,14 +115,7 @@ function AppAI() {
         onReactFlowInit={setReactFlowInstance}
       />
 
-      {/* AI Status Indicator */}
-      {isAIThinking && (
-        <div className="fixed bottom-4 right-4 bg-white border-2 border-purple-300 rounded-lg px-4 py-2 shadow-lg flex items-center gap-2">
-          <div className="animate-pulse">🤔</div>
-          <span className="text-sm font-kollektif">{aiThinkingText || 'AI is thinking...'}</span>
-        </div>
-      )}
-    </div>
+      </div>
   );
 }
 

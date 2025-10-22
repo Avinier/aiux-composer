@@ -20,7 +20,7 @@ export const BOX_STATUS = {
 export const BORDER_COLORS = {
   [BOX_TYPES.ROOT]: 'border-gray-400',
   [BOX_TYPES.CONTEXT]: 'border-blue-500',
-  [BOX_TYPES.MEANINGMAKING]: 'border-purple-500',
+  [BOX_TYPES.MEANINGMAKING]: 'border-pink-500',
   [BOX_TYPES.RESEARCH]: 'border-teal-500',
   [BOX_TYPES.SYNTHESIS]: 'border-indigo-500',
   [BOX_TYPES.TENSION]: 'border-orange-500',
@@ -42,7 +42,7 @@ export const STAGE_INDICATORS = {
   [BOX_TYPES.MEANINGMAKING]: {
     icon: '💭',
     text: 'This is meaningmaking - only YOU can answer',
-    color: 'text-purple-600'
+    color: 'text-pink-600'
   },
   [BOX_TYPES.RESEARCH]: {
     icon: 'ℹ️',

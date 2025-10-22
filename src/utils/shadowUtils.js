@@ -39,7 +39,7 @@ export const getBoxColor = (type) => {
   const colorMap = {
     root: '#6c757d',          // Dark gray
     context: '#00b7ff',       // Sky Blue
-    meaningmaking: '#a855f7',  // Electric Purple
+    meaningmaking: '#ff6b9d',  // Bubblegum Pink
     research: '#06ffa5',       // Cyan
     synthesis: '#7209b7',      // Violet
     tension: '#ff6b35',        // Coral Orange
