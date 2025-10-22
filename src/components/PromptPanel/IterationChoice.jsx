@@ -7,7 +7,11 @@ const IterationChoice = ({ currentRound, onIteration, onDecide }) => {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 100, opacity: 0 }}
-      className="bg-accent border-t-2 border-darkgray p-6"
+      className="p-6"
+      style={{
+        borderTop: '2px solid var(--gray)',
+        backgroundColor: 'var(--gray)'
+      }}
       transition={{
         type: "spring",
         stiffness: 300,
@@ -27,7 +31,8 @@ const IterationChoice = ({ currentRound, onIteration, onDecide }) => {
         </motion.button>
         <motion.button
           onClick={onDecide}
-          className="w-full py-3 bg-background border-2 border-text text-text font-body font-normal rounded-sm hover:opacity-80 transition-opacity duration-200"
+          className="w-full py-3 bg-background text-text font-body font-normal rounded-sm hover:opacity-80 transition-opacity duration-200"
+          style={{ border: '2px solid var(--gray)' }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}

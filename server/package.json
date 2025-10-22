@@ -1,0 +1,19 @@
+{
+  "name": "aiux-api-server",
+  "version": "1.0.0",
+  "description": "Lightweight Express API for GLM integration",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["glm", "api", "express"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  }
+}

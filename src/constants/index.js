@@ -32,7 +32,7 @@ export const STAGE_INDICATORS = {
   [BOX_TYPES.ROOT]: {
     icon: null,
     text: 'Define your problem',
-    color: 'text-gray-600'
+    color: 'text-gray-400'
   },
   [BOX_TYPES.CONTEXT]: {
     icon: '💡',

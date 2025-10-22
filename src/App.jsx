@@ -1,11 +1,26 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import Canvas from './components/Canvas';
 import PromptPanel from './components/PromptPanel';
+import { FoundationModal } from './components/FoundationModal';
 import { useCanvasState } from './hooks/useCanvasState';
 
 function App() {
   const canvasRef = useRef(null);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [foundationComplete, setFoundationComplete] = useState(false);
+
+  // Check if foundation has been shown before (persist across sessions)
+  useEffect(() => {
+    const foundationShown = localStorage.getItem('foundationShown');
+    if (foundationShown === 'true') {
+      setFoundationComplete(true);
+    }
+  }, []);
+
+  const handleFoundationComplete = () => {
+    setFoundationComplete(true);
+    localStorage.setItem('foundationShown', 'true');
+  };
 
   const {
     nodes,
@@ -17,10 +32,13 @@ function App() {
     totalBoxes,
     currentRound,
     showIterationChoice,
+    isGenerating,
+    generationMessage,
     onNodesChange,
     onEdgesChange,
     handleIteration,
     generateDecisionBox,
+    setActiveBoxId,
     resetPositions
   } = useCanvasState(canvasRef);
 
@@ -47,6 +65,22 @@ function App() {
     // TODO: Implement proper reset
   };
 
+  // Focus on a specific box by setting it as active and panning to it
+  const handleFocusBox = useCallback((boxId) => {
+    setActiveBoxId(boxId);
+    // Pan to the box without changing zoom
+    setTimeout(() => {
+      if (canvasRef.current?.fitToNodes) {
+        canvasRef.current.fitToNodes([boxId]);
+      }
+    }, 50);
+  }, [setActiveBoxId]);
+
+  // Show Foundation Modal first if not completed
+  if (!foundationComplete) {
+    return <FoundationModal onComplete={handleFoundationComplete} />;
+  }
+
   return (
     <div className="flex h-screen bg-background">
       <PromptPanel
@@ -54,14 +88,16 @@ function App() {
         activeNode={activeNode}
         responses={responses}
         completedBoxes={completedBoxes}
-        totalBoxes={totalBoxes}
+        nodes={nodes}
         currentRound={currentRound}
         showIterationChoice={showIterationChoice}
         onIteration={handleIteration}
         onDecide={generateDecisionBox}
-        resetPositions={handleResetView}
+        onFocusBox={handleFocusBox}
         isExpanded={isSidebarExpanded}
         onToggle={() => setIsSidebarExpanded(!isSidebarExpanded)}
+        isGenerating={isGenerating}
+        generationMessage={generationMessage}
       />
 
       <Canvas
@@ -73,6 +109,7 @@ function App() {
         currentStage={currentStage}
         onExport={handleExport}
         onNewCanvas={handleNewCanvas}
+        onResetView={handleResetView}
       />
     </div>
   );

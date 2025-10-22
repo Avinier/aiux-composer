@@ -15,9 +15,16 @@ const BoxNode = ({ data, selected }) => {
   // Auto-focus when box becomes active
   useEffect(() => {
     if (isActive && textareaRef.current && !isReadOnly) {
-      textareaRef.current.focus();
+      console.log(`🔍 [AUTOFOCUS] Attempting to focus ${data.id}`);
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          console.log(`✅ [AUTOFOCUS] Focused ${data.id}`);
+        }
+      }, 100);
     }
-  }, [isActive, isReadOnly]);
+  }, [isActive, isReadOnly, data.id]);
 
   // Reset focus when box completes
   useEffect(() => {
@@ -31,14 +38,13 @@ const BoxNode = ({ data, selected }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    // Don't activate if already completed
-    if (isComplete) {
-      return;
-    }
+
+    // Always call onActivate to update the left panel, even for completed boxes
     if (data.onActivate) {
       data.onActivate(data.id);
     }
-    // Auto-focus when clicking on active box
+
+    // Auto-focus only if the box is active and not readonly
     if (isActive && textareaRef.current && !isReadOnly) {
       setTimeout(() => {
         textareaRef.current?.focus();
@@ -48,13 +54,32 @@ const BoxNode = ({ data, selected }) => {
 
   const handleKeyDown = (e) => {
     // Handle Tab key for completion
-    if (e.key === 'Tab' && isActive && !isReadOnly && data.content && data.content.length > 0) {
-      e.preventDefault();
-      if (data.onComplete) {
-        data.onComplete(data.id);
-        // Force blur to reset state
-        textareaRef.current?.blur();
-        setIsFocused(false);
+    if (e.key === 'Tab') {
+      console.log('⌨️ [TAB KEY] Pressed in box:', data.id);
+      console.log('📊 [TAB KEY] Status:', {
+        isActive,
+        isReadOnly,
+        hasContent: !!data.content,
+        contentLength: data.content?.length,
+        actualContent: data.content,
+        hasOnComplete: !!data.onComplete
+      });
+
+      if (isActive && !isReadOnly && data.content && data.content.length > 0) {
+        e.preventDefault();
+        console.log('✅ [TAB KEY] Completing box:', data.id);
+        if (data.onComplete) {
+          data.onComplete(data.id);
+          // Force blur to reset state
+          textareaRef.current?.blur();
+          setIsFocused(false);
+        }
+      } else {
+        console.log('⚠️ [TAB KEY] Cannot complete - conditions not met');
+        console.log('   - isActive:', isActive);
+        console.log('   - isReadOnly:', isReadOnly);
+        console.log('   - hasContent:', !!data.content);
+        console.log('   - contentLength:', data.content?.length);
       }
     }
   };
@@ -123,10 +148,10 @@ const BoxNode = ({ data, selected }) => {
       {/* Header - only shown when not focused */}
       {showHeader && (
         <div style={{ padding: '20px 24px' }}>
-          <div className="flex items-center justify-between gap-6">
-            <span className="font-body text-lg text-lightgray">{data.boxId}</span>
-            <span className="font-heading text-2xl font-normal text-text flex-1 text-center">{data.label}</span>
-            <div className="w-6">{/* Empty space for layout balance */}</div>
+          <div className="flex items-center justify-center gap-6">
+            <span className="font-heading text-2xl font-normal text-text">
+              {data.boxId?.replace(/^box/i, '')} {data.label}
+            </span>
           </div>
         </div>
       )}
@@ -171,9 +196,17 @@ const BoxNode = ({ data, selected }) => {
         )}
 
         {isReadOnly && (
-          <div className="text-xl font-body text-darkgray bg-background p-4 rounded-sm">
-            {data.content || 'AI research data will appear here...'}
-          </div>
+          <>
+            {/* Show user value connection for research boxes */}
+            {data.userValue && (
+              <div className="text-sm font-body text-gray italic mb-3 px-2">
+                {data.userValue}
+              </div>
+            )}
+            <div className="text-xl font-body text-darkgray bg-background p-4 rounded-sm">
+              {data.content || 'AI research data will appear here...'}
+            </div>
+          </>
         )}
       </div>
 

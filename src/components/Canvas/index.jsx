@@ -6,6 +6,7 @@ import {
   useReactFlow
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { RotateCcw } from 'lucide-react';
 import CompletionModal from './CompletionModal';
 import BoxNode from '../BoxNode';
 
@@ -14,20 +15,27 @@ const nodeTypes = {
 };
 
 // Inner component that uses the ReactFlow provider hooks
-const CanvasContent = ({ onReset }) => {
-  const { fitView, setCenter, getZoom } = useReactFlow();
+const CanvasContent = ({ onReset, onReactFlowInit }) => {
+  const { fitView, setCenter, getZoom, getViewport, setViewport } = useReactFlow();
 
   // Expose the functions to parent
   React.useEffect(() => {
     if (onReset) {
-      onReset({ fitView, setCenter, getZoom });
+      onReset({ fitView, setCenter, getZoom, getViewport, setViewport });
     }
-  }, [fitView, setCenter, getZoom, onReset]);
+  }, [fitView, setCenter, getZoom, getViewport, setViewport, onReset]);
+
+  // Pass ReactFlow instance to parent for auto-scroll
+  React.useEffect(() => {
+    if (onReactFlowInit) {
+      onReactFlowInit({ fitView, setCenter, getZoom, getViewport, setViewport });
+    }
+  }, [fitView, setCenter, getZoom, getViewport, setViewport, onReactFlowInit]);
 
   return (
     <>
       <Background color="var(--gray)" gap={20} variant="dots" />
-      <Controls className="bg-gray border border-darkgray rounded-sm" />
+      {/* <Controls className="bg-gray border border-darkgray rounded-sm" /> */}
     </>
   );
 };
@@ -39,7 +47,9 @@ const Canvas = forwardRef(({
   onEdgesChange,
   currentStage,
   onExport,
-  onNewCanvas
+  onNewCanvas,
+  onResetView,
+  onReactFlowInit
 }, ref) => {
   const fitViewRef = useRef(null);
 
@@ -78,6 +88,16 @@ const Canvas = forwardRef(({
 
   return (
     <div className="flex-1 relative bg-background">
+      {/* Show All Boxes Button */}
+      <button
+        onClick={onResetView}
+        className="absolute top-4 right-4 z-10 px-3 py-1.5 bg-background border border-gray hover:border-darkgray text-text text-xs rounded-sm flex items-center gap-1.5 transition-all duration-200 font-body hover:bg-gray shadow-sm"
+        title="Reset view to show all boxes"
+      >
+        <RotateCcw className="w-3 h-3" />
+        <span>Show All</span>
+      </button>
+
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -86,14 +106,17 @@ const Canvas = forwardRef(({
         nodeTypes={nodeTypes}
         onPaneClick={handlePaneClick}
         fitView
-        fitViewOptions={{ padding: 0.1, includeHiddenNodes: false }}
+        fitViewOptions={{ padding: 0.2, includeHiddenNodes: false, maxZoom: 0.7 }}
         style={{ backgroundColor: 'var(--primary-bg)' }}
         defaultViewport={{ x: 50, y: 0, zoom: 0.45 }}
         minZoom={0.2}
         maxZoom={1.5}
         proOptions={{ hideAttribution: true }}
       >
-        <CanvasContent onReset={(functions) => { fitViewRef.current = functions; }} />
+        <CanvasContent
+          onReset={(functions) => { fitViewRef.current = functions; }}
+          onReactFlowInit={onReactFlowInit}
+        />
       </ReactFlow>
 
       {/* Completion Message */}

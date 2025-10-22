@@ -128,38 +128,40 @@ export const getIdealPositions = () => {
     // Adjusting for visual balance
     'box0': { x: 550, y: 50 }, // Visually centered above context boxes
 
-    // Context boxes - evenly spread across canvas (increased spacing from root)
-    'box1a': { x: 100, y: 250 },
-    'box1b': { x: 450, y: 250 },
-    'box1c': { x: 800, y: 250 },
-    'box1d': { x: 1150, y: 250 },
+    // Context boxes - evenly spread across canvas (moved down for better connection line spacing)
+    'box1a': { x: 100, y: 300 },
+    'box1b': { x: 450, y: 300 },
+    'box1c': { x: 800, y: 300 },
+    'box1d': { x: 1150, y: 300 },
 
     // Meaningmaking boxes - 2 rows of 3, perfectly centered
     // Row 1 - centered on axis (3 boxes * 280px + 2 gaps * 50px = 940px total)
-    'box2a': { x: centerX - 470, y: 450 },  // 315
-    'box2b': { x: centerX - 140, y: 450 },  // 645
-    'box2c': { x: centerX + 190, y: 450 },  // 975
+    // Increased Y position to prevent overlap with context boxes (150px height + 100px gap + connection lines)
+    'box2a': { x: centerX - 470, y: 520 },  // 315
+    'box2b': { x: centerX - 140, y: 520 },  // 645
+    'box2c': { x: centerX + 190, y: 520 },  // 975
     // Row 2 - same X positions (h-[140px] + 30px gap = 170px spacing)
-    'box2d': { x: centerX - 470, y: 620 },  // 315
-    'box2e': { x: centerX - 140, y: 620 },  // 645
-    'box2f': { x: centerX + 190, y: 620 },  // 975
+    'box2d': { x: centerX - 470, y: 690 },  // 315
+    'box2e': { x: centerX - 140, y: 690 },  // 645
+    'box2f': { x: centerX + 190, y: 690 },  // 975
 
     // Research boxes - 4 boxes centered on axis
     // (4 boxes * 200px + 3 gaps * 50px = 950px total)
-    'box3a': { x: centerX - 475, y: 820 },  // 310
-    'box3b': { x: centerX - 225, y: 820 },  // 560
-    'box3c': { x: centerX + 25, y: 820 },   // 810
-    'box3d': { x: centerX + 275, y: 820 },  // 1060
+    // Adjusted Y position to account for meaningmaking section shift
+    'box3a': { x: centerX - 475, y: 890 },  // 310
+    'box3b': { x: centerX - 225, y: 890 },  // 560
+    'box3c': { x: centerX + 25, y: 890 },   // 810
+    'box3d': { x: centerX + 275, y: 890 },  // 1060
 
     // Synthesis - centered on axis with larger gap from research (moved down to avoid overlap)
-    'box4': { x: centerX - 200, y: 1270 },  // 585
+    'box4': { x: centerX - 200, y: 1340 },  // 585
 
     // Tension boxes - 3 boxes centered on axis (same as meaningmaking row)
-    'box5a': { x: centerX - 470, y: 1470 }, // 315
-    'box5b': { x: centerX - 140, y: 1470 }, // 645
-    'box5c': { x: centerX + 190, y: 1470 }, // 975
+    'box5a': { x: centerX - 470, y: 1540 }, // 315
+    'box5b': { x: centerX - 140, y: 1540 }, // 645
+    'box5c': { x: centerX + 190, y: 1540 }, // 975
 
     // Decision - centered on axis
-    'boxFinal': { x: centerX - 200, y: 1670 }  // 585
+    'boxFinal': { x: centerX - 200, y: 1740 }  // 585
   };
 };
